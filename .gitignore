@@ -36,3 +36,8 @@ terraform-provider-github
 
 # do not commit secrets
 .env
+dist/
+provider.json
+key.json
+platform.json
+version.json

@@ -16,6 +16,12 @@ type Actor struct {
 	Slug githubv4.String
 }
 
+type ActorTeam struct {
+	ID           githubv4.ID
+	Name         githubv4.String
+	CombinedSlug githubv4.String
+}
+
 type ActorUser struct {
 	ID    githubv4.ID
 	Name  githubv4.String
@@ -25,7 +31,7 @@ type ActorUser struct {
 type DismissalActorTypes struct {
 	Actor struct {
 		App  Actor     `graphql:"... on App"`
-		Team Actor     `graphql:"... on Team"`
+		Team ActorTeam `graphql:"... on Team"`
 		User ActorUser `graphql:"... on User"`
 	}
 }
@@ -33,7 +39,7 @@ type DismissalActorTypes struct {
 type BypassForcePushActorTypes struct {
 	Actor struct {
 		App  Actor     `graphql:"... on App"`
-		Team Actor     `graphql:"... on Team"`
+		Team ActorTeam `graphql:"... on Team"`
 		User ActorUser `graphql:"... on User"`
 	}
 }
@@ -41,7 +47,7 @@ type BypassForcePushActorTypes struct {
 type BypassPullRequestActorTypes struct {
 	Actor struct {
 		App  Actor     `graphql:"... on App"`
-		Team Actor     `graphql:"... on Team"`
+		Team ActorTeam `graphql:"... on Team"`
 		User ActorUser `graphql:"... on User"`
 	}
 }
@@ -49,7 +55,7 @@ type BypassPullRequestActorTypes struct {
 type PushActorTypes struct {
 	Actor struct {
 		App  Actor     `graphql:"... on App"`
-		Team Actor     `graphql:"... on Team"`
+		Team ActorTeam `graphql:"... on Team"`
 		User ActorUser `graphql:"... on User"`
 	}
 }
@@ -368,7 +374,6 @@ func branchProtectionResourceDataActors(d *schema.ResourceData, meta interface{}
 
 func setDismissalActorIDs(actors []DismissalActorTypes, data BranchProtectionResourceData, meta interface{}) []string {
 	dismissalActors := make([]string, 0, len(actors))
-	orgName := meta.(*Owner).name
 
 	for _, a := range actors {
 		IsID := false
@@ -380,8 +385,8 @@ func setDismissalActorIDs(actors []DismissalActorTypes, data BranchProtectionRes
 			}
 		}
 		if !IsID {
-			if a.Actor.Team.Slug != "" {
-				dismissalActors = append(dismissalActors, orgName+"/"+string(a.Actor.Team.Slug))
+			if a.Actor.Team.CombinedSlug != "" {
+				dismissalActors = append(dismissalActors, string(a.Actor.Team.CombinedSlug))
 				continue
 			}
 			if a.Actor.User.Login != "" {
@@ -399,8 +404,6 @@ func setDismissalActorIDs(actors []DismissalActorTypes, data BranchProtectionRes
 func setBypassForcePushActorIDs(actors []BypassForcePushActorTypes, data BranchProtectionResourceData, meta interface{}) []string {
 	bypassActors := make([]string, 0, len(actors))
 
-	orgName := meta.(*Owner).name
-
 	for _, a := range actors {
 		IsID := false
 		for _, v := range data.BypassForcePushActorIDs {
@@ -411,8 +414,8 @@ func setBypassForcePushActorIDs(actors []BypassForcePushActorTypes, data BranchP
 			}
 		}
 		if !IsID {
-			if a.Actor.Team.Slug != "" {
-				bypassActors = append(bypassActors, orgName+"/"+string(a.Actor.Team.Slug))
+			if a.Actor.Team.CombinedSlug != "" {
+				bypassActors = append(bypassActors, string(a.Actor.Team.CombinedSlug))
 				continue
 			}
 			if a.Actor.User.Login != "" {
@@ -430,8 +433,6 @@ func setBypassForcePushActorIDs(actors []BypassForcePushActorTypes, data BranchP
 func setBypassPullRequestActorIDs(actors []BypassPullRequestActorTypes, data BranchProtectionResourceData, meta interface{}) []string {
 	bypassActors := make([]string, 0, len(actors))
 
-	orgName := meta.(*Owner).name
-
 	for _, a := range actors {
 		IsID := false
 		for _, v := range data.BypassPullRequestActorIDs {
@@ -442,8 +443,8 @@ func setBypassPullRequestActorIDs(actors []BypassPullRequestActorTypes, data Bra
 			}
 		}
 		if !IsID {
-			if a.Actor.Team.Slug != "" {
-				bypassActors = append(bypassActors, orgName+"/"+string(a.Actor.Team.Slug))
+			if a.Actor.Team.CombinedSlug != "" {
+				bypassActors = append(bypassActors, string(a.Actor.Team.CombinedSlug))
 				continue
 			}
 			if a.Actor.User.Login != "" {
@@ -461,8 +462,6 @@ func setBypassPullRequestActorIDs(actors []BypassPullRequestActorTypes, data Bra
 func setPushActorIDs(actors []PushActorTypes, data BranchProtectionResourceData, meta interface{}) []string {
 	pushActors := make([]string, 0, len(actors))
 
-	orgName := meta.(*Owner).name
-
 	for _, a := range actors {
 		IsID := false
 		for _, v := range data.PushActorIDs {
@@ -473,8 +472,8 @@ func setPushActorIDs(actors []PushActorTypes, data BranchProtectionResourceData,
 			}
 		}
 		if !IsID {
-			if a.Actor.Team.Slug != "" {
-				pushActors = append(pushActors, orgName+"/"+string(a.Actor.Team.Slug))
+			if a.Actor.Team.CombinedSlug != "" {
+				pushActors = append(pushActors, string(a.Actor.Team.CombinedSlug))
 				continue
 			}
 			if a.Actor.User.Login != "" {

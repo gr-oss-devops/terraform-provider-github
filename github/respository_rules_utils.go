@@ -507,6 +507,29 @@ func flattenRules(rules []*github.RepositoryRule, org bool) []interface{} {
 			rule["strict_required_status_checks_policy"] = params.StrictRequiredStatusChecksPolicy
 			rule["do_not_enforce_on_create"] = params.DoNotEnforceOnCreate
 			rulesMap[v.Type] = []map[string]interface{}{rule}
+
+		case "code_scanning":
+			var params github.RequiredCodeScanningRuleParameters
+			err := json.Unmarshal(*v.Parameters, &params)
+			if err != nil {
+				log.Printf("[INFO] Unexpected error unmarshalling rule %s with parameters: %v",
+					v.Type, v.Parameters)
+			}
+
+			codeScanningToolSlice := make([]map[string]interface{}, 0)
+			for _, tool := range params.RequiredCodeScanningTools {
+				codeScanningToolSlice = append(codeScanningToolSlice, map[string]interface{}{
+					"tool":                      tool.Tool,
+					"alerts_threshold":          tool.AlertsThreshold,
+					"security_alerts_threshold": tool.SecurityAlertsThreshold,
+				})
+			}
+
+			rule := make(map[string]interface{})
+			rule["required_code_scanning_tool"] = codeScanningToolSlice
+			//v.Type is "code_scanning", read from Github response, but the key in the rulesMap should be "required_code_scanning"
+			rulesMap["required_"+v.Type] = []map[string]interface{}{rule}
+
 		}
 	}
 

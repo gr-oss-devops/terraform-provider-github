@@ -323,6 +323,14 @@ func TestGithubRepositoryRulesets(t *testing.T) {
 						do_not_enforce_on_create             = true
 					}
 
+ 		 			required_code_scanning {
+						required_code_scanning_tool {
+							tool = "CodeQL"
+							alerts_threshold = "errors"
+							security_alerts_threshold = "high_or_higher"
+						}
+					}
+
 					non_fast_forward = true
 				}
 			}
