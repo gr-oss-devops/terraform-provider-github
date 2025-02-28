@@ -27,9 +27,9 @@ jobs:
         run: |
           TAG_NAME="${{ github.event.workflow_run.head_branch }}"
           SHORT_VERSION=$(echo "$TAG_NAME" | sed -E 's/v([0-9]+\.[0-9]+\.[0-9]+)-.*/\1/')
-          WITHOUT_V=$(echo "$TAG_NAME" | sed -E 's/v//')
+          FULL_VERSION=$(echo "$TAG_NAME" | sed -E 's/v//')
           echo "short_version=$SHORT_VERSION" >> $GITHUB_ENV
-          echo "without_v=$WITHOUT_V" >> $GITHUB_ENV
+          echo "full_version=$FULL_VERSION" >> $GITHUB_ENV
 
       - name: Create version.json
         run: |
@@ -39,7 +39,7 @@ jobs:
               "type": "registry-provider-versions",
               "attributes": {
                 "version": "${{ env.short_version }}",
-                "key-id": "3AAFE0237464B9EB",
+                "key-id": "${{ vars.TFE_KEY_ID }}",
                 "protocols": ["5.0"]
               }
             }
@@ -62,11 +62,11 @@ jobs:
 
       - name: Upload SHA256SUMS
         run: |
-          curl -T dist/terraform-provider-github_${{ env.without_v }}_SHA256SUMS ${{ env.shasums_upload }}
+          curl -T dist/terraform-provider-github_${{ env.full_version }}_SHA256SUMS ${{ env.shasums_upload }}
 
       - name: Upload SHA256SUMS.sig
         run: |
-          curl -T dist/terraform-provider-github_${{ env.without_v }}_SHA256SUMS.sig ${{ env.shasums_sig_upload }}
+          curl -T dist/terraform-provider-github_${{ env.full_version }}_SHA256SUMS.sig ${{ env.shasums_sig_upload }}
 
       - name: Process and Upload Provider Binaries
         env:
