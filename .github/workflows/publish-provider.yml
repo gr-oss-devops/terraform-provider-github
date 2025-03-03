@@ -49,14 +49,14 @@ jobs:
         run: |
           echo ${{ env.short_version }}
           echo ${{ env.full_version }}
-          echo ${{ inputs.tfe_token }}
+          echo ${{ secrets.tfe_token }}
           echo ${{ vars.TFE_KEY_ID }}
           cat version.json
 
       - name: Create provider version in Terraform Enterprise
         id: create_version
         env:
-          TOKEN: ${{ secrets.TFE_TOKEN }}
+          TOKEN: ${{ secrets.tfe_token }}
         run: |
           echo $TOKEN
           RESPONSE=$(curl -s -X POST \
