@@ -25,7 +25,7 @@ jobs:
       - name: Download release assets
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh release download v${{ env.full_version }} --repo ${{ github.repository }} --dir dist/
+        run: gh release download ${{ env.full_version }} --repo ${{ github.repository }} --dir dist/
 
       - name: Create version.json
         run: |
