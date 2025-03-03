@@ -43,7 +43,7 @@ jobs:
           EOF
 
       - name: Debug
-        run:
+        run: |
           echo ${{ env.short_version }}
           echo ${{ env.full_version }}
           echo ${{ secrets.TFE_TOKEN }}
