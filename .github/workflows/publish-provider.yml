@@ -4,9 +4,7 @@ on:
   workflow_call:
     secrets:
       tfe_token:
-        type: string
         required: true
-        description: 'The TFE_TOKEN to Authorize to TFE API'
 
 jobs:
   publish:
