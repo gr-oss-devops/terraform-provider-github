@@ -47,3 +47,5 @@ jobs:
   publish-provider:
     needs: goreleaser
     uses: ./.github/workflows/publish-provider.yml
+    secrets:
+      tfe_token: ${{ secrets.TFE_TOKEN }}

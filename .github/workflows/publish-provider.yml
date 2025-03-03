@@ -2,6 +2,11 @@ name: Publish Terraform Provider
 
 on:
   workflow_call:
+    inputs:
+      tfe_token:
+        type: string
+        required: true
+        description: 'The TFE_TOKEN to Authorize to TFE API'
 
 jobs:
   publish:
@@ -46,7 +51,7 @@ jobs:
         run: |
           echo ${{ env.short_version }}
           echo ${{ env.full_version }}
-          echo ${{ secrets.TFE_TOKEN }}
+          echo ${{ inputs.tfe_token }}
           echo ${{ vars.TFE_KEY_ID }}
           cat version.json
 
