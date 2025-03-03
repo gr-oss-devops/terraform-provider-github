@@ -45,4 +45,5 @@ jobs:
           GPG_FINGERPRINT: ${{ steps.import_gpg.outputs.fingerprint }}
 
   publish-provider:
+    needs: goreleaser
     uses: ./.github/workflows/publish-provider.yml
