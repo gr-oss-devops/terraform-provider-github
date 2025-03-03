@@ -12,21 +12,19 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Download release assets
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          echo ${{ toJSON(github) }}
-          gh release download ${{ github.event.workflow_run.head_branch }} --repo ${{ github.repository }} --dir dist/
-
       - name: Extract short version
         id: extract_version
         run: |
-          TAG_NAME="${{ github.event.workflow_run.head_branch }}"
+          TAG_NAME="${{ github.ref }}"
           SHORT_VERSION=$(echo "$TAG_NAME" | sed -E 's/v([0-9]+\.[0-9]+\.[0-9]+)-.*/\1/')
           FULL_VERSION=$(echo "$TAG_NAME" | sed -E 's/v//')
           echo "short_version=$SHORT_VERSION" >> $GITHUB_ENV
           echo "full_version=$FULL_VERSION" >> $GITHUB_ENV
+
+      - name: Download release assets
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh release download v${{ env.full_version }} --repo ${{ github.repository }} --dir dist/
 
       - name: Create version.json
         run: |
