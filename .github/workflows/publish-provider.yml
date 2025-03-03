@@ -18,14 +18,14 @@ jobs:
           REF_NAME="${{ github.ref }}"
           TAG_NAME="${REF_NAME#refs/tags/}"
           SHORT_VERSION=$(echo "$TAG_NAME" | sed -E 's/^([0-9]+\.[0-9]+\.[0-9]+).*/\1/')
-          FULL_VERSION="$TAG_NAME"
+          FULL_VERSION="${TAG_NAME#v}"
           echo "short_version=$SHORT_VERSION" >> $GITHUB_ENV
           echo "full_version=$FULL_VERSION" >> $GITHUB_ENV
 
       - name: Download release assets
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh release download ${{ env.full_version }} --repo ${{ github.repository }} --dir dist/
+        run: gh release download v${{ env.full_version }} --repo ${{ github.repository }} --dir dist/
 
       - name: Create version.json
         run: |
