@@ -45,4 +45,4 @@ jobs:
           GPG_FINGERPRINT: ${{ steps.import_gpg.outputs.fingerprint }}
 
   publish-provider:
-    uses: ./.github/actions/publish-provider.yml
+    uses: ./.github/workflows/publish-provider.yml
