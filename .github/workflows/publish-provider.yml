@@ -16,6 +16,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          echo ${{ toJSON(github) }}
           gh release download ${{ github.event.workflow_run.head_branch }} --repo ${{ github.repository }} --dir dist/
 
       - name: Extract short version
