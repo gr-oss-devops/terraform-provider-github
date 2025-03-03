@@ -15,9 +15,10 @@ jobs:
       - name: Extract short version
         id: extract_version
         run: |
-          TAG_NAME="${{ github.ref }}"
-          SHORT_VERSION=$(echo "$TAG_NAME" | sed -E 's/v([0-9]+\.[0-9]+\.[0-9]+)-.*/\1/')
-          FULL_VERSION=$(echo "$TAG_NAME" | sed -E 's/v//')
+          REF_NAME="${{ github.ref }}"
+          TAG_NAME="${REF_NAME#refs/tags/}"
+          SHORT_VERSION=$(echo "$TAG_NAME" | sed -E 's/^([0-9]+\.[0-9]+\.[0-9]+).*/\1/')
+          FULL_VERSION="$TAG_NAME"
           echo "short_version=$SHORT_VERSION" >> $GITHUB_ENV
           echo "full_version=$FULL_VERSION" >> $GITHUB_ENV
 
