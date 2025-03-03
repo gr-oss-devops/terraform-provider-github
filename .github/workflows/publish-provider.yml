@@ -42,6 +42,14 @@ jobs:
           }
           EOF
 
+      - name: Debug
+        run:
+          echo ${{ env.short_version }}
+          echo ${{ env.full_version }}
+          echo ${{ secrets.TFE_TOKEN }}
+          echo ${{ vars.TFE_KEY_ID }}
+          cat version.json
+
       - name: Create provider version in Terraform Enterprise
         id: create_version
         env:
