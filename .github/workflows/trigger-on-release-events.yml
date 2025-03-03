@@ -1,0 +1,17 @@
+name: Test on release events
+
+on:
+  release:
+    types:
+      - created
+      - published
+
+# GitHub considers creating releases and uploading assets as writing contents.
+permissions:
+  contents: write
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - run: ${{ toJson(github) }}
