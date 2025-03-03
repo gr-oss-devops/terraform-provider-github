@@ -2,9 +2,7 @@ name: Test on release events
 
 on:
   release:
-    types:
-      - created
-      - published
+    types: [published]
 
 # GitHub considers creating releases and uploading assets as writing contents.
 permissions:
