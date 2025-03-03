@@ -17,8 +17,8 @@ jobs:
         run: |
           REF_NAME="${{ github.ref }}"
           TAG_NAME="${REF_NAME#refs/tags/}"
-          SHORT_VERSION=$(echo "$TAG_NAME" | sed -E 's/^([0-9]+\.[0-9]+\.[0-9]+).*/\1/')
           FULL_VERSION="${TAG_NAME#v}"
+          SHORT_VERSION=$(echo "$FULL_VERSION" | sed -E 's/^([0-9]+\.[0-9]+\.[0-9]+).*/\1/')
           echo "short_version=$SHORT_VERSION" >> $GITHUB_ENV
           echo "full_version=$FULL_VERSION" >> $GITHUB_ENV
 
